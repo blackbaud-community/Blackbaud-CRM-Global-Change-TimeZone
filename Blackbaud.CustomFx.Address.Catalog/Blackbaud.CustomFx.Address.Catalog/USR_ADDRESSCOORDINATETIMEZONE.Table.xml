@@ -1,0 +1,66 @@
+﻿<TableSpec 
+	xmlns="bb_appfx_table"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="1f27dabf-1ecf-4585-8e2d-e7044c50e7ce"
+	Name="ADDRESS COORDINATE TIMEZONE (Custom)"
+	Description="Used to store one time zone record for one AddressCoordinates record. 
+  The custom USR_ADDRESSCOORDINATETIMEZONE table will have a one to one relationship 
+  with AddressCoordinates and will store a foreign key value to the TIMEZONEENTRY table.  
+  See GlobalChange definition with display name of Address Coordinate TimeZone (Custom)"
+	Author="Technical Training"
+	Tablename="USR_ADDRESSCOORDINATETIMEZONE"
+  PrimaryKeyAsForeignKeyTablename="ADDRESSCOORDINATES"
+  WarnOnMissingIndexes="true"
+  >
+
+	<!-- define fields on the table -->
+	<Fields>
+    <ForeignKeyField Name="TIMEZONEENTRYID" 
+                     ForeignTable="TIMEZONEENTRY" 
+                     Required="false"
+                     Cardinality="ManyToOne" 
+                     OnDelete="RaiseError" 
+                     Description="FK value to the TIMEZONEENTRY.ID value for the given TIMEZONEENTRY.NAME column"/>
+
+    <EnumField Name="RESPONSESTATUSCODE" 
+               Description="The Google Time Zone API provides a simple interface 
+               to request the time zone for a location on the earth. 
+               The time zone web service API response status." 
+               DefaultValue="1">
+      <EnumValues>
+        <EnumValue ID="1" Translation="OK"/>
+        <EnumValue ID="2" Translation="Invalid API Request"/>
+        <EnumValue ID="3" Translation="Over API Query Limit"/>
+        <EnumValue ID="4" Translation="API Request Denied"/>
+        <EnumValue ID="5" Translation="Unknown Error"/>
+        <EnumValue ID="6" Translation="Zero Results"/>
+        <EnumValue ID="7" Translation="General Error"/>
+        <EnumValue ID="8" Translation="TimeZoneEntry Foreign Key Not Found in DB"/>
+      </EnumValues>
+      
+    </EnumField>
+
+    <!--OK - The request was successful.
+  INVALID_REQUEST - The request was malformed
+  OVER_QUERY_LIMIT - The requestor has exceeded quota.
+  REQUEST_DENIED - The API did not complete the request. Confirm that the request was sent over http instead of https.
+  UNKNOWN_ERROR - indicates an unknown error.
+  ZERO_RESULTS - indicates that no time zone data could be found for the specified position or time. 
+  Confirm that the request is for a location on land, and not over water.-->
+    <TextField Name="RESPONSESTATUSDESC" 
+               Length="300" 
+               Description="The time zone web service API response status description"/>
+    
+	</Fields>
+
+
+  <!-- define any indexes on the table -->
+	<Indexes>
+    <Index>
+      <IndexFields>
+        <IndexField Name="TIMEZONEENTRYID" Direction="ASC"/>
+      </IndexFields>
+    </Index>
+	</Indexes>
+  
+</TableSpec>

@@ -1,0 +1,76 @@
+﻿<GlobalChangeSpec
+	xmlns="bb_appfx_globalchange"
+	xmlns:common="bb_appfx_commontypes"
+	ID="49b9fc8c-ef4c-4a07-b13b-2ff47a2c191d"
+	Name="Address Coordinate TimeZone Global Change (Custom)"
+	Description="Adds time zone data to the constituent address coordinate record.  
+  Depends on geocodes (latitude and longitude columns) values populated within AddressCoordinates table.
+  One way to populate GeoCodes is to run a 'Address Geocode' global change on the appropriate
+  constituent addresses prior to running 'Address Coordinate TimeZone Global Change (Custom)' global change.  
+  See AddressCoordinates table."
+	Author="Technical Training"
+	DisplayName="Address Coordinate TimeZone (Custom)"
+	GlobalChangeFolder="Constituent\Address"
+	>
+
+	<!-- indicate the server-side catalog implementation that will be used to process the global change.  This should refer to a class
+	that inherits AppCatalog.AppGlobalChangeProcess.
+	 -->
+  <CLRGlobalChange AssemblyName="Blackbaud.CustomFx.Address.Catalog"
+                   ClassName="Blackbaud.CustomFx.Address.Catalog.AddressCoordinateTimeZoneGlobalChange">
+    <common:GrantExecuteList>
+      <common:GrantExecute>USR_USP_TIMEZONEENTRY_GETBYNAME</common:GrantExecute>
+      <common:GrantExecute>USR_USP_ADDRESSCOORDINATETIMEZONE_GCPROCESS_UPDATE</common:GrantExecute>
+    </common:GrantExecuteList>
+    <common:GrantSelectList>
+      <common:GrantSelect>ADDRESS(ID,CONSTITUENTID, DATECHANGED, ISPRIMARY)</common:GrantSelect>
+      <common:GrantSelect>ADDRESSCOORDINATES(ID,LATITUDE,LONGITUDE,ADDRESSID, DATEADDED, DATECHANGED)</common:GrantSelect>
+      <common:GrantSelect>USR_ADDRESSCOORDINATETIMEZONE(ID)</common:GrantSelect>    
+    </common:GrantSelectList>
+    <common:GrantUpdateList>
+      <common:GrantUpdate>USR_ADDRESSCOORDINATETIMEZONE</common:GrantUpdate>
+    </common:GrantUpdateList>
+    <common:GrantInsertList>
+      <common:GrantInsert>USR_ADDRESSCOORDINATETIMEZONE</common:GrantInsert>
+    </common:GrantInsertList>
+    
+  </CLRGlobalChange>
+
+	<ParametersFormMetaData>
+		<!-- describe fields on the parameter form, which correspond to public fields on the class.  Note that system parameters 
+		like the context @CHANGEAGENTID, @ASOF, @NUMBERADDED, @NUMBEREDITED, and @NUMBERDELETED need not be listed. -->
+		<common:FormMetaData>
+			<common:FormFields>
+        <common:FormField Caption="Selection" DataType="Guid"
+          Description="Constituent selection containing the geocoded addresses which should be timezoned."
+          FieldID="IDSETREGISTERID"
+          Required="true">
+          <common:SearchList SearchListID="1F0E603C-1C55-4E1E-8218-BDB877B2CBE8" EnableQuickFind="true">
+            <common:FormFieldOverrides>
+              <common:FormFieldOverride FieldID="RECORDTYPE" DefaultValueText="Constituent" ReadOnly="true" />
+            </common:FormFieldOverrides>
+          </common:SearchList>
+        </common:FormField>
+
+        <common:FormField Caption="Only process primary address geocodes"
+        DataType="Boolean"
+        Description="Determines whether to process all Geocodes for a constituent's 
+        address or only the Geocodes for a constituent's primary address."
+        FieldID="ONLYPRIMARY" />
+
+        <common:FormField 
+          Caption="Only process new and changed address geocodes" 
+          DataType="Boolean" 
+          Description="Determines whether to process geocodes for addresses 
+          that are unchanged since last being assigned a geocode." 
+          FieldID="ONLYCHANGED" 
+          DefaultValueText="true"/>
+      </common:FormFields>
+
+			<!-- indicate the client-side component for the user interface -->
+			<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+				<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+			</common:FormUIComponent>-->
+		</common:FormMetaData>
+	</ParametersFormMetaData>
+</GlobalChangeSpec>

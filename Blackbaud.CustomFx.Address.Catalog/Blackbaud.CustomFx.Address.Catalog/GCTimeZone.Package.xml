@@ -1,0 +1,22 @@
+<PackageSpec 
+    xmlns="bb_appfx_package"
+    xmlns:common="bb_appfx_commontypes"
+    ID="4c35d57b-f1e6-49b3-86ce-fcff93301327"
+    Name="GCTimeZone Package"
+    Description="Address Coordinate TimeZone (Custom) Package"
+    Author="Technical Training"
+    >
+
+	
+	<common:DependencyList>
+    <common:Dependency CatalogAssembly="Blackbaud.CustomFx.Address.Catalog.dll" 
+                       CatalogItem="Blackbaud.CustomFx.Address.Catalog.USR_ADDRESSCOORDINATETIMEZONE.Table.xml" />
+        <common:Dependency CatalogAssembly="Blackbaud.CustomFx.Address.Catalog.dll" 
+                           CatalogItem="Blackbaud.CustomFx.Address.Catalog.USR_USP_ADDRESSCOORDINATETIMEZONE_GCPROCESS_UPDATE.xml" />
+        <common:Dependency CatalogAssembly="Blackbaud.CustomFx.Address.Catalog.dll" 
+                           CatalogItem="Blackbaud.CustomFx.Address.Catalog.USR_USP_TIMEZONEENTRY_GETBYNAME.xml" />
+        <common:Dependency CatalogAssembly="Blackbaud.CustomFx.Address.Catalog.dll" 
+                           CatalogItem="Blackbaud.CustomFx.Address.Catalog.AddressCoordinateTimeZone.GlobalChange.xml" />
+    </common:DependencyList>
+
+</PackageSpec>

@@ -1,0 +1,30 @@
+﻿<SQLStoredProcedureSpec
+	xmlns="bb_appfx_sqlstoredprocedure"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="7ec5c329-4e4a-46f0-ba50-5090edddd77a"
+	Name="USR_USP_TIMEZONEENTRY_GETBYNAME"
+	Description="Retrieve the TimeZoneEntry.ID for the given Name.  
+  Used by Address Coordinate TimeZone Global Change (Custom)"
+	Author="Technical Training"
+	SPName="USR_USP_TIMEZONEENTRY_GETBYNAME"
+	>
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_TIMEZONEENTRY_GETBYNAME
+(
+@TimeZoneName as varchar(400)
+)
+as
+DECLARE @RETVAL as uniqueidentifier
+
+begin
+	Select @RETVAL = ID 
+  from TIMEZONEENTRY
+  WHERE NAME = @TimeZoneName
+  
+  SELECT @RETVAL
+  
+end
+		]]>
+	</CreateProcedureSQL>
+</SQLStoredProcedureSpec>

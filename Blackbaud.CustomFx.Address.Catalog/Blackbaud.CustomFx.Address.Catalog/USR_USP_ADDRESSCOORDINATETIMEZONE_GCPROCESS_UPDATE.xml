@@ -1,0 +1,111 @@
+﻿<SQLStoredProcedureSpec
+	xmlns="bb_appfx_sqlstoredprocedure"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="2025946f-bdd6-4542-908e-3846333e37e2"
+	Name="USR_USP_ADDRESSCOORDINATETIMEZONE_GCPROCESS_UPDATE"
+	Description="Updates the USR_ADDRESSCOORDINATETIMEZONE with time zone data.  
+Supports the Address Coordinate TimeZone Global Change (Custom) Global Change
+with GC System Record ID:  49b9fc8c-ef4c-4a07-b13b-2ff47a2c191d"
+	Author="Technical Training"
+	SPName="USR_USP_ADDRESSCOORDINATETIMEZONE_GCPROCESS_UPDATE"
+	>
+
+	<CreateProcedureSQL>
+		<![CDATA[
+
+CREATE PROCEDURE [dbo].[USR_USP_ADDRESSCOORDINATETIMEZONE_GCPROCESS_UPDATE] 
+	-- Add the parameters for the stored procedure here
+	@doc nvarchar(max) = '<ROOT></ROOT>'
+	, @CHANGEAGENTID uniqueidentifier = NULL
+AS
+DECLARE @idoc int
+
+BEGIN
+-- =============================================
+-- Author:		Technical Training
+-- Create date: 11/27/2012
+-- Description:	Updates the USR_ADDRESSCOORDINATETIMEZONE with time zone data.  
+-- Supports the "Address Coordinate TimeZone Global Change (Custom)" Global Change
+-- with GC System Record ID:  49b9fc8c-ef4c-4a07-b13b-2ff47a2c191d
+-- =============================================
+----example input into sp
+-- DECLARE @doc nvarchar(max)
+ 
+--Select @doc ='
+--<ROOT>
+--<TimeZoneResponse ADDRESSCOORDINATESID="AEC02AB8-430B-48B8-A32C-348F98C04C2B" StatusCode="1" StatusDesc="The request was successful." TimeZoneEntryID="B6CE5E5E-236F-437E-9A42-DFDB945B5286"/>
+--<TimeZoneResponse ADDRESSCOORDINATESID="E457774D-97E4-4F0C-A35B-5020347C2EAD" StatusCode="1" StatusDesc="The request was successful." TimeZoneEntryID="B6CE5E5E-236F-437E-9A42-DFDB945B5286"/>
+--<TimeZoneResponse ADDRESSCOORDINATESID="41BDE2D6-C9F7-4AB6-86DC-129A01F98920" StatusCode="1" StatusDesc="The request was successful." TimeZoneEntryID="B6CE5E5E-236F-437E-9A42-DFDB945B5286"/>
+--<TimeZoneResponse ADDRESSCOORDINATESID="B9E1C919-811E-4B88-A39E-D8203FF08BAD" StatusCode="1" StatusDesc="The request was successful." TimeZoneEntryID="B6CE5E5E-236F-437E-9A42-DFDB945B5286"/>
+--</ROOT>'
+
+--EXEC USR_USP_ADDRESSCOORDINATETIMEZONE_GCPROCESS_UPDATE @doc, 'E3DBB14E-3A5E-4FBF-8575-E1CAB08A11FB'
+
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+if @CHANGEAGENTID IS NULL
+	exec dbo.USP_CHANGEAGENT_GETORCREATECHANGEAGENT @CHANGEAGENTID output;
+
+    -- Insert statements for procedure here
+EXEC sp_xml_preparedocument @idoc OUTPUT, @doc
+
+-- Create a temporary table variable to hold the output actions.
+-- Track the number of inserts and updates performed by the MERGE T-SQL Statement
+-- http://msdn.microsoft.com/en-us/library/bb510625.aspx
+DECLARE @SummaryOfChanges TABLE(Change VARCHAR(20));
+
+DECLARE @TIMEZONEXMLTABLE TABLE(ADDRESSCOORDINATESID  uniqueidentifier
+                  , StatusCode tinyint
+                  , StatusDesc nvarchar(300)
+                  , TimeZoneEntryID uniqueidentifier);
+
+-- Select the records from the xml doc and either update matching records within the 
+-- USR_ADDRESSCOORDINATETIMEZONE table or insert as new rows.
+INSERT INTO @TIMEZONEXMLTABLE (ADDRESSCOORDINATESID, StatusCode, StatusDesc, TimeZoneEntryID)
+SELECT ADDRESSCOORDINATESID,  StatusCode, StatusDesc, TimeZoneEntryID
+		 FROM       OPENXML (@idoc, '/ROOT/TimeZoneResponse',1)
+            WITH (ADDRESSCOORDINATESID  uniqueidentifier
+                  , StatusCode tinyint
+                  , StatusDesc nvarchar(300)
+                  , TimeZoneEntryID uniqueidentifier) 
+
+MERGE dbo.USR_ADDRESSCOORDINATETIMEZONE AS target
+USING  ( SELECT ADDRESSCOORDINATESID,  StatusCode, StatusDesc, TimeZoneEntryID
+		 FROM       @TIMEZONEXMLTABLE ) 
+                  as source (ADDRESSCOORDINATESID, StatusCode, StatusDesc, TimeZoneEntryID)
+ON (target.ID = source.ADDRESSCOORDINATESID)
+WHEN MATCHED THEN 
+	UPDATE SET	target.TIMEZONEENTRYID = CASE 
+											WHEN source.TimeZoneEntryID = '00000000-0000-0000-0000-000000000000' THEN NULL
+											ELSE source.TimeZoneEntryID
+										 END
+											,
+				target.RESPONSESTATUSCODE = source.StatusCode,
+				target.RESPONSESTATUSDESC = source.StatusDesc,
+				target.CHANGEDBYID = @CHANGEAGENTID,
+				target.DATECHANGED = GETDATE()
+WHEN NOT MATCHED THEN
+	INSERT (ID, TIMEZONEENTRYID, RESPONSESTATUSCODE, RESPONSESTATUSDESC, ADDEDBYID, CHANGEDBYID, DATEADDED, DATECHANGED)
+	VALUES (source.ADDRESSCOORDINATESID, CASE 
+											WHEN source.TimeZoneEntryID = '00000000-0000-0000-0000-000000000000' THEN NULL
+											ELSE source.TimeZoneEntryID
+										 END 
+											,
+			source.StatusCode, source.StatusDesc, @CHANGEAGENTID , @CHANGEAGENTID , GETDATE(), GETDATE())
+OUTPUT $action INTO @SummaryOfChanges;
+
+
+EXEC sp_xml_removedocument @idoc
+
+-- Query the results of the table variable.
+SELECT Change, COUNT(*) AS CountPerChange
+FROM @SummaryOfChanges
+GROUP BY Change;
+
+END
+		]]>
+	</CreateProcedureSQL>
+
+</SQLStoredProcedureSpec>
