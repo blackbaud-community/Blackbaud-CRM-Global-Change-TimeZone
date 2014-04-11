@@ -1,4 +1,3 @@
-
 Blackbaud CRM Global Change Example: TimeZone
 ====================================
 A global change allows you to make changes to specific records within your database via criteria that you specify.
@@ -22,3 +21,11 @@ See the [Blackbaud CRM Read Me](https://github.com/blackbaud-community/Blackbaud
 [Administer and Configure Global Change Instances (PDF)](https://www.blackbaud.com/files/support/guides/enterprise/admin.pdf)
 
 [Google Maps Time Zone API](https://developers.google.com/maps/documentation/timezone/)
+
+
+##Contributing##
+
+If you would like to contribute your own code sample, please read the following resources:
+
+* [Blackbaud CRM Read Me](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/README.md)
+* [Contributing to the blackbaud-community](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/contributing.md)
