@@ -1,3 +1,4 @@
+
 Blackbaud CRM Global Change Example: TimeZone
 ====================================
 A global change allows you to make changes to specific records within your database via criteria that you specify.
@@ -12,6 +13,8 @@ This sample also includes specs that define the user interface controls for the 
 
 
 ## Resources
+See the [Blackbaud CRM Read Me](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/README.md). 
+
 [Step by Step Instructions](https://www.blackbaud.com/files/support/guides/infinitydevguide/infsdk-developer-help.htm#../Subsystems/infGC-developer-help/Content/InfinityGlobalChange/coGCAddingCLR1.htm)
 
  [Global Change](https://www.blackbaud.com/files/support/guides/infinitydevguide/infsdk-developer-help.htm#../Subsystems/infGC-developer-help/Content/InfinityGlobalChange/WelcomeInfinityGlobalChange.htm) Chapter within Developer Guides
