@@ -12,20 +12,13 @@ This sample also includes specs that define the user interface controls for the 
 
 
 ## Resources
-See the [Blackbaud CRM Read Me](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/README.md). 
-
-[Step by Step Instructions](https://www.blackbaud.com/files/support/guides/infinitydevguide/infsdk-developer-help.htm#../Subsystems/infGC-developer-help/Content/InfinityGlobalChange/coGCAddingCLR1.htm)
-
- [Global Change](https://www.blackbaud.com/files/support/guides/infinitydevguide/infsdk-developer-help.htm#../Subsystems/infGC-developer-help/Content/InfinityGlobalChange/WelcomeInfinityGlobalChange.htm) Chapter within Developer Guides
-
-[Administer and Configure Global Change Instances (PDF)](https://www.blackbaud.com/files/support/guides/enterprise/admin.pdf)
-
-[Google Maps Time Zone API](https://developers.google.com/maps/documentation/timezone/)
+* See the [Blackbaud CRM Read Me](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/README.md). 
+* [Step by Step Instructions for creating this sample](https://www.blackbaud.com/files/support/guides/infinitydevguide/infsdk-developer-help.htm#../Subsystems/infGC-developer-help/Content/InfinityGlobalChange/coGCAddingCLR1.htm)
+* [Global Change](https://www.blackbaud.com/files/support/guides/infinitydevguide/infsdk-developer-help.htm#../Subsystems/infGC-developer-help/Content/InfinityGlobalChange/WelcomeInfinityGlobalChange.htm) Chapter within Developer Guides
+* [Administer and Configure Global Change Instances (PDF)](https://www.blackbaud.com/files/support/guides/enterprise/admin.pdf)
+* [Google Maps Time Zone API](https://developers.google.com/maps/documentation/timezone/)
 
 
 ##Contributing##
 
-If you would like to contribute your own code sample, please read the following resources:
-
-* [Blackbaud CRM Read Me](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/README.md)
-* [Contributing to the blackbaud-community](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/contributing.md)
+If you would like to contribute to this code sample, please carefully read the [contributing documentation](https://github.com/blackbaud-community/Blackbaud-CRM/blob/master/contributing.md), which details the necessary workflow.  Included in those requirements is [signing the Contributor License Agreement](http://www.bbdevnetwork.com/cla).
